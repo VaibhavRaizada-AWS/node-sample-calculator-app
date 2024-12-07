@@ -21,13 +21,13 @@ RUN chmod +x /usr/local/bin/snyk
 #RUN chmod -R +x ./snyk
 #Auth set through environment variable
 # authenticate the Snyk CLI
-RUN snyk auth $SNYK_TOKEN
+RUN /usr/local/bin/snyk auth $SNYK_TOKEN
 # perform a Snyk SCA scan; continue if vulnerabilities are found
-RUN snyk test || true
+RUN /usr/local/bin/snyk test || true
 #RUN ./snyk test --severity-threshold=medium
 #RUN ./snyk monitor
 # upload a snapshot of the project to Snyk for continuous monitoring
-RUN snyk monitor
+RUN /usr/local/bin/snyk monitor
 
 #~~~~~~~END SNYK test~~~~~~~~~~~~
 
