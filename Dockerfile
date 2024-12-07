@@ -21,6 +21,7 @@ RUN curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/sny
 RUN chmod -R +x ./snyk
 #Auth set through environment variable
 # authenticate the Snyk CLI
+RUN ls -l /bin
 RUN ls -l .
 RUN ./snyk auth $SNYK_TOKEN
 # perform a Snyk SCA scan; continue if vulnerabilities are found
