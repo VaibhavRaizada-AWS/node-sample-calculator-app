@@ -1,10 +1,3 @@
-#~~~~~~~SNYK Variable~~~~~~~~~~~~
-# Declare Snyktoken as a build-arg
-ARG snyk_auth_token
-# Set the SNYK_TOKEN environment variable
-ENV SNYK_TOKEN=${snyk_auth_token}
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 FROM --platform=linux/amd64 node:alpine
 RUN mkdir -p /usr/src/calc
 WORKDIR /usr/src/calc
@@ -12,6 +5,11 @@ COPY . .
 RUN npm install
 
 #~~~~~~~SNYK test~~~~~~~~~~~~
+# Declare Snyktoken as a build-arg
+ARG snyk_auth_token
+# Set the SNYK_TOKEN environment variable
+ENV SNYK_TOKEN=${snyk_auth_token}
+
 # download, configure and run snyk. Break build if vulns present, post results to `https://snyk.io/`
 RUN latest_version=$(curl -Is "https://github.com/snyk/cli/releases/latest" | grep "^location" | sed 's#.*tag/##g' | tr -d "\r")
 RUN snyk_cli_dl_linux="https://github.com/snyk/cli/releases/download/${latest_version}/snyk-linux"
