@@ -5,7 +5,7 @@ COPY . .
 RUN npm install
 
 #~~~~~~~SNYK test~~~~~~~~~~~~
-RUN apt-get update && apt-get install -y curl
+RUN apk add curl
 # Declare Snyktoken as a build-arg
 ARG snyk_auth_token
 # Set the SNYK_TOKEN environment variable
