@@ -16,18 +16,18 @@ ENV SNYK_TOKEN=${snyk_auth_token}
 
 #RUN snyk_cli_dl_linux="https://github.com/snyk/cli/releases/download/${latest_version}/snyk-linux"
 #RUN curl -Lo /usr/local/bin/snyk $snyk_cli_dl_linux
-RUN curl -Lo /usr/local/bin/snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
-RUN chmod +x /usr/local/bin/snyk
-#RUN chmod -R +x ./snyk
+RUN curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
+#RUN chmod +x /usr/local/bin/snyk
+RUN chmod -R +x ./snyk
 #Auth set through environment variable
 # authenticate the Snyk CLI
-RUN /usr/local/bin/snyk auth $SNYK_TOKEN
+RUN ./snyk auth $SNYK_TOKEN
 # perform a Snyk SCA scan; continue if vulnerabilities are found
-RUN /usr/local/bin/snyk test || true
-#RUN ./snyk test --severity-threshold=medium
-#RUN ./snyk monitor
+#RUN /usr/local/bin/snyk test || true
+RUN ./snyk test --severity-threshold=medium
+RUN ./snyk monitor
 # upload a snapshot of the project to Snyk for continuous monitoring
-RUN /usr/local/bin/snyk monitor
+#RUN /usr/local/bin/snyk monitor
 
 #~~~~~~~END SNYK test~~~~~~~~~~~~
 
