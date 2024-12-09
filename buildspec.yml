@@ -17,7 +17,7 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build --build-arg snyk_auth_token=$SNYK_TOKEN -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      #- docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
       - latest_version=$(curl -Is "https://github.com/snyk/cli/releases/latest" | grep "^location" | sed 's#.*tag/##g' | tr -d "\r")
       - snyk_cli_dl_linux="https://github.com/snyk/cli/releases/download/${latest_version}/snyk-linux"
       - curl -Lo /usr/local/bin/snyk $snyk_cli_dl_linux
@@ -25,9 +25,10 @@ phases:
       # authenticate the Snyk CLI
       - snyk auth $SNYK_TOKEN
       # perform a Snyk SCA scan; continue if vulnerabilities are found
-      - snyk test || true
+      - snyk test --docker $REPOSITORY_URI:latest || true
       # upload a snapshot of the project to Snyk for continuous monitoring
-      - snyk monitor
+      - snyk monitor --docker $REPOSITORY_URI:latest
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on `date`
